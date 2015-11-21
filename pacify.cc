@@ -52,6 +52,8 @@ double distance(const std::string &a, const std::string &b)
   std::string L2("qwertyuiop");
   std::string L3("asdfghjkl");
   std::string L4("zxcvbnm");
+
+  return 0;
 }
 
 int main(void)
