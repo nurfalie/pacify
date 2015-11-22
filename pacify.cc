@@ -5,6 +5,8 @@ extern "C"
 
 #include <algorithm>
 #include <iostream>
+#include <list>
+#include <map>
 #include <string>
 
 double char_class(const char c)
@@ -37,21 +39,43 @@ double char_class(const char c)
     return 10;
 }
 
-double distance(const std::string &a, const std::string &b)
+double distance(const char a, const char b)
 {
-  std::string _a_(a);
-  std::string _b_(b);
+  std::string _a_;
+  std::string _b_;
 
+  _a_.append(1, a);
+  _b_.append(1, b);
   std::transform(_a_.begin(), _a_.end(), _a_.begin(), ::tolower);
   std::transform(_b_.begin(), _b_.end(), _b_.begin(), ::tolower);
 
   if(_a_ == _b_)
     return 0;
 
+  std::map<char, std::pair<double, double> > keys;
   std::string L1("1234567890");
   std::string L2("qwertyuiop");
   std::string L3("asdfghjkl");
   std::string L4("zxcvbnm");
+  std::string _a_b_(_a_ + _b_);
+
+  for(size_t i = 0; i < L1.length(); i++)
+    keys[L1[i]] = std::pair<double, double> (static_cast<double> (i), 0);
+
+  for(size_t i = 0; i < L2.length(); i++)
+    keys[L2[i]] = std::pair<double, double> (static_cast<double> (i) + 0.5,
+					     1);
+
+  for(size_t i = 0; i < L3.length(); i++)
+    keys[L3[i]] = std::pair<double, double> (static_cast<double> (i) + 0.75,
+					     2);
+
+  for(size_t i = 0; i < L4.length(); i++)
+    keys[L4[i]] = std::pair<double, double> (static_cast<double> (i) + 1, 3);
+
+  for(size_t i = 0; i < (_a_b_).length(); i++)
+    if(keys.find(_a_b_[i]) == keys.end())
+      return 15;
 
   return 0;
 }
