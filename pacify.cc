@@ -4,6 +4,7 @@ extern "C"
 }
 
 #include <algorithm>
+#include <cmath>
 #include <iostream>
 #include <list>
 #include <map>
@@ -77,7 +78,10 @@ double distance(const char a, const char b)
     if(keys.find(_a_b_[i]) == keys.end())
       return 15;
 
-  return 0;
+  return std::pow((std::pow(keys[_a_.at(0)].first -
+			    keys[_b_.at(0)].first, 2) +
+		   std::pow(keys[_a_.at(0)].second -
+			    keys[_b_.at(0)].second, 2)), 0.5);
 }
 
 int main(void)
