@@ -100,6 +100,7 @@ public:
       {
 	double r = std::pow(a, 2) + std::pow(b, 2) + std::pow(c, 3) +
 	  std::pow(d, 2);
+
 	rc += 30.0 * static_cast<double> (m_passphrase.length()) /
 	  std::pow(r, 0.5);
       }
@@ -192,10 +193,14 @@ int main(void)
 		      "иссле́дованию косми́ческого простра́нства").evaluate()
 	    << std::endl;
   std::cout << pacify("Hello.").evaluate() << std::endl;
+  std::cout << pacify("Hello, hello, hello, hello.").evaluate() << std::endl;
+  std::cout << pacify("Habcd, abcde, abcde, abcde.").evaluate() << std::endl;
   std::cout << pacify("If one woodchuck could chuck this much wood, "
 		      "how much wood would three thousand woodchucks "
 		      "chuck?").evaluate() << std::endl;
   std::cout << pacify("This is a test.").evaluate() << std::endl;
   std::cout << pacify("Those zebras visited Guam.").evaluate() << std::endl;
+  std::cout << pacify("XradarX").evaluate() << std::endl;
+  std::cout << pacify("aaazzz ccc ccc zzzaaa").evaluate() << std::endl;
   return EXIT_SUCCESS;
 }
