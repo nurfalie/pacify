@@ -1,3 +1,8 @@
+/*
+** Alexis Megas.
+** Translation of https://github.com/maandree/passcheck.
+*/
+
 extern "C"
 {
 #include <stdlib.h>
