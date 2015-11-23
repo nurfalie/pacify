@@ -1,7 +1,6 @@
 CXX_OPTIONS = -Wall -Wconversion -Werror -Wextra -Wformat=2 \
 	      -Wpointer-arith -Wsign-conversion \
-	      -Wstack-protector -Wstrict-overflow=5 \
-	      -fPIE -fstack-protector-all -pedantic
+	      -Wstrict-overflow=5 -pedantic
 
 SOURCE	= pacify.cc
 
