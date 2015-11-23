@@ -17,7 +17,7 @@ extern "C"
 class pacify
 {
 public:
-  pacify(const std::string passphrase)
+  pacify(const std::string &passphrase)
   {
     m_passphrase = passphrase;
   }
