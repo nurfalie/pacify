@@ -179,14 +179,14 @@ private:
       keys[L4[i]] = std::pair<double, double> (static_cast<double> (i) + 1.0,
 					       3.0);
 
-    for(size_t i = 0; i < (_a_b_).length(); i++)
+    for(size_t i = 0; i < _a_b_.length(); i++)
       if(keys.end() == keys.find(_a_b_[i]))
 	return 15.0;
 
-    return std::pow((std::pow(keys[_a_.at(0)].first -
-			      keys[_b_.at(0)].first, 2) +
-		     std::pow(keys[_a_.at(0)].second -
-			      keys[_b_.at(0)].second, 2)), 0.5);
+    return std::pow(std::pow(keys[_a_.at(0)].first -
+			     keys[_b_.at(0)].first, 2) +
+		    std::pow(keys[_a_.at(0)].second -
+			     keys[_b_.at(0)].second, 2), 0.5);
   }
 };
 
