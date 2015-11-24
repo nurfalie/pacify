@@ -33,7 +33,10 @@ public:
     std::map<double, int> classes;
     std::string last("None");
 
-    for(int i = 0; i < 12; i++)
+    classes[2.5] = 0;
+    classes[3.5] = 0;
+
+    for(int i = 1; i <= 10; i++)
       classes[i] = 0;
 
     for(size_t i = 0; i < m_passphrase.length(); i++)
