@@ -1,4 +1,5 @@
 /*
+** Mattias Andrée.
 ** Alexis Megas.
 ** Translation of https://github.com/maandree/passcheck.
 */
@@ -13,6 +14,7 @@ extern "C"
 #include <iostream>
 #include <map>
 #include <string>
+#include <vector>
 
 class pacify
 {
@@ -22,54 +24,61 @@ public:
     size_t n = passphrase.length();
 
     m_passphrase_length = 0;
+
     for(size_t i = 0; i < n; i++)
-      if((static_cast<int> (passphrase.at(i)) & 0xC0) != 0x80)
+      if((static_cast<int> (passphrase.at(i)) & 0xc0) != 0x80)
 	m_passphrase_length += 1;
 
     m_passphrase = new long int[m_passphrase_length];
+
     for(size_t i = 0, j = 0; i < n; j++)
       {
 	int c = static_cast<int> (passphrase.at(i++));
+
 	if((c & 0x80) == 0)
 	  m_passphrase[j] = static_cast<long int> (c);
-	else if((c & 0xC0) == 0xC0)
+	else if((c & 0xc0) == 0xc0)
 	  {
 	    int n = 0;
+
 	    while(c & 0x80)
 	      n++, c <<= 1;
-	    c = (c & 0xFF) >> n--;
+
+	    c = (c & 0xff) >> n--;
 	    m_passphrase[j] = static_cast<long int> (c);
+
 	    while(n--)
 	      {
 		c = static_cast<int> (passphrase.at(i++));
-		if((c & 0xC0) != 0x80)
+
+		if((c & 0xc0) != 0x80)
 		  {
-		    m_passphrase[j] = 0; /* XXX invalid input */
+		    m_passphrase[j] = 0; /* XXX invalid input. */
 		    break;
 		  }
 		else
 		  {
 		    m_passphrase[j] <<= 6;
-		    m_passphrase[j] |= static_cast<long int> (c & 0x3F);
+		    m_passphrase[j] |= static_cast<long int> (c & 0x3f);
 		  }
 	      }
 	  }
 	else
-	  m_passphrase[j] = 0; /* XXX invalid input */
+	  m_passphrase[j] = 0; /* XXX invalid input. */
       }
   }
 
   ~pacify()
   {
-    delete[] m_passphrase;
+    delete []m_passphrase;
   }
 
   double evaluate(void) const
   {
     double rc = 0.0;
+    long int last = -1;
     std::map<long int, int> used;
     std::map<double, int> classes;
-    long int last;
 
     classes[2.5] = 0;
     classes[3.5] = 0;
@@ -79,8 +88,10 @@ public:
 
     for(size_t i = 0; i < m_passphrase_length; i++)
       {
+	double r = 0.0;
 	long int c = m_passphrase[i];
-	double r = char_class(c);
+
+	r = char_class(c);
 
 	if(used.end() == used.find(c))
 	  used[c] = 1;
@@ -110,6 +121,7 @@ public:
 	      r = distance('\0', '\0');
 	    else
 	      r = distance(static_cast<char> (c), static_cast<char> (last));
+
 	    rc += std::pow(r, 0.5);
 	  }
 
@@ -153,16 +165,18 @@ public:
   }
 
 private:
-  long int* m_passphrase;
+  long int *m_passphrase;
   size_t m_passphrase_length;
 
   double char_class(const long int c) const
   {
     if(static_cast<long int> ('0') <= c && c <= static_cast<long int> ('9'))
       return 1.0;
-    else if(static_cast<long int> ('a') <= c && c <= static_cast<long int> ('z'))
+    else if(static_cast<long int> ('a') <= c &&
+	    c <= static_cast<long int> ('z'))
       return 2.0;
-    else if(static_cast<long int> ('A') <= c && c <= static_cast<long int> ('Z'))
+    else if(static_cast<long int> ('A') <= c &&
+	    c <= static_cast<long int> ('Z'))
       return 2.5;
     else if(c < (1 << 7))
       return 3.0;
@@ -232,18 +246,24 @@ private:
 
 int main(void)
 {
-  std::cout << pacify("Национа́льное управле́ние по воздухопла́ванию и "
-		      "иссле́дованию косми́ческого простра́нства").evaluate()
-	    << std::endl;
-  std::cout << pacify("Hello.").evaluate() << std::endl;
-  std::cout << pacify("Hello, hello, hello, hello.").evaluate() << std::endl;
-  std::cout << pacify("Habcd, abcde, abcde, abcde.").evaluate() << std::endl;
-  std::cout << pacify("If one woodchuck could chuck this much wood, "
-		      "how much wood would three thousand woodchucks "
-		      "chuck?").evaluate() << std::endl;
-  std::cout << pacify("This is a test.").evaluate() << std::endl;
-  std::cout << pacify("Those zebras visited Guam.").evaluate() << std::endl;
-  std::cout << pacify("XradarX").evaluate() << std::endl;
-  std::cout << pacify("aaazzz ccc ccc zzzaaa").evaluate() << std::endl;
+  std::vector<std::string> vector;
+
+  vector.push_back("Национа́льное управле́ние по воздухопла́ванию и "
+		   "иссле́дованию косми́ческого простра́нства");
+  vector.push_back("Hello.");
+  vector.push_back("Hello, hello, hello, hello.");
+  vector.push_back("Habcd, abcde, abcde, abcde.");
+  vector.push_back("If one woodchuck could chuck this much wood, "
+		   "how much wood would three thousand woodchucks "
+		   "chuck?");
+  vector.push_back("This is a test.");
+  vector.push_back("Those zebras visited Guam.");
+  vector.push_back("XradarX");
+  vector.push_back("aaazzz ccc ccc zzzaaa");
+
+  for(size_t i = 0; i < vector.size(); i++)
+    std::cout << vector[i] << ": "
+	      << pacify(vector[i]).evaluate() << std::endl;
+
   return EXIT_SUCCESS;
 }
